@@ -1,4 +1,4 @@
-package com.replilab.worm
+package com.replilab.worm;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
