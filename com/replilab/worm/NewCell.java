@@ -10,10 +10,10 @@ public class NewCell {
     private int OldX, OldY;
     private Image imageCell;
 
-    public NewCell(GraphicsContext gc, int currentX, int currentY) {
+    public NewCell(GraphicsContext gc, int currentX, int currentY, Image image) {
         this.CurrentX = currentX;
         this.CurrentY = currentY;
-        this.imageCell = new Image(getClass().getResourceAsStream("cell.bmp"));
+        this.imageCell = image;
     }
 
     public void work(GraphicsContext gc, int x, int y, String event) {
@@ -22,7 +22,7 @@ public class NewCell {
         if (childCell!=null) {
             childCell.work(gc, OldX, OldY, event);}
         else if (event == "grow" && childCell == null) {
-            childCell = new NewCell(gc, x, y);
+            childCell = new NewCell(gc, x, y, imageCell);
         }
     }
 

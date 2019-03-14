@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * worm class contain cellsHashMap
  */
-
+@Deprecated
 public class Worm implements Serializable {
     Image imageCell = new Image(getClass().getResourceAsStream("cell.bmp"));
     Image imageFood = new Image(getClass().getResourceAsStream("food.bmp"));

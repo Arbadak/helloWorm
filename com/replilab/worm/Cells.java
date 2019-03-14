@@ -3,7 +3,7 @@ package com.replilab.worm;
 /**
  * Cell class, is element of worm, contains every cell coordinate and heading
  */
-
+@Deprecated
 public class Cells {
     public Integer id;
     public int posX, posY;
