@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     Scene scene;
     public boolean isRun=true;
-    public Worm worm = new Worm();
+    public Worm worm = new NewWorm();
     Canvas canvas = new Canvas(800, 800);
     GraphicsContext gc = canvas.getGraphicsContext2D();
 

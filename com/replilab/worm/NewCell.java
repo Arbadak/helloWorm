@@ -9,37 +9,32 @@ public class NewCell {
     private int CurrentX, CurrentY;
     private int OldX, OldY;
     private Image imageCell;
-    private int cellN;
 
-    public NewCell(GraphicsContext gc, int currentX, int currentY, int number) {
-        this.childCell = childCell;
+    public NewCell(GraphicsContext gc, int currentX, int currentY) {
         this.CurrentX = currentX;
         this.CurrentY = currentY;
         this.imageCell = new Image(getClass().getResourceAsStream("cell.bmp"));
-        this.cellN=number;
     }
 
     public void work(GraphicsContext gc, int x, int y, String event) {
         reposition(x, y);
         drawSelf(gc);
         if (childCell!=null) {
-            childCell.work(gc, x, y, event);}
+            childCell.work(gc, OldX, OldY, event);}
         else if (event == "grow" && childCell == null) {
-            childCell = new NewCell(gc, x, y, ++cellN);}
-
+            childCell = new NewCell(gc, x, y);
+        }
     }
 
     public void reposition(int x, int y) {
-        OldX = CurrentX;
+        OldX = this.CurrentX;
         CurrentX = x;
-        OldY = CurrentY;
+        OldY = this.CurrentY;
         CurrentY = y;
     }
     public void drawSelf(GraphicsContext gc){
         gc.drawImage(imageCell, CurrentX+1, CurrentY+1);
-
-
-    }
+     }
 
 
 }

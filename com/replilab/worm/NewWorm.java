@@ -5,11 +5,12 @@ import javafx.scene.canvas.GraphicsContext;
 public class NewWorm extends Worm {
 
     NewHead SnAkE;
-
     @Override
     public void begin() {
 
         SnAkE=new NewHead();
+
+
 
     }
 

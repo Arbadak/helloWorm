@@ -16,8 +16,7 @@ public class NewHead  {
     private NewCell childCell;
     private Food food;
     private  String event;
-    private GraphicsContext ctx;
-    private int cellN=0;
+
 
     public NewHead() {
         CurrentX = (int) (Math.random() * 26)*30;
@@ -28,7 +27,6 @@ public class NewHead  {
         imageHeadRigh = new Image(getClass().getResourceAsStream("headright.bmp"));
         food=new Food();
         headLook="UP";
-        //this.ctx=gc;
     }
 
     public void changeDirection(String direction) {
@@ -42,7 +40,7 @@ public class NewHead  {
         checkCollide();
 
         if (event == "grow" && childCell == null) {
-            childCell = new NewCell(gc, x, y,1);
+            childCell = new NewCell(gc, x, y);
         } else if (childCell!=null){
             childCell.work(gc, x, y, event);
         }
