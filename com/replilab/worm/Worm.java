@@ -2,14 +2,11 @@ package com.replilab.worm;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
- * worm class contain cells
+ * worm class contain cellsHashMap
  */
 
 public class Worm implements Serializable {
@@ -20,20 +17,9 @@ public class Worm implements Serializable {
     Image imageHeadLeft=new Image(getClass().getResourceAsStream("headleft.bmp"));
     Image imageHeadRight=new Image(getClass().getResourceAsStream("headright.bmp"));
 
-    /**
-     * Cell class, is element of worm, contains every cell coordinate and heading
-     */
 
-    public class Cells {
-        public Integer id;
-        public int posX, posY;
-        public String cellColor;
-        public Boolean isHead;
-        public String headLook;
-    }
 
-    public HashMap<Integer, Cells> cells = new HashMap<Integer, Cells>();
-    //public ArrayList<Object> cells = new ArrayList<Object>();
+    public HashMap<Integer, Cells> cellsHashMap = new HashMap<Integer, Cells>();
 
 
     /**
@@ -49,7 +35,7 @@ public class Worm implements Serializable {
         cell0.cellColor = "BLUE";
         cell0.id = 0;
         cell0.isHead=false;
-        cells.put(cell0.id, cell0);
+        cellsHashMap.put(cell0.id, cell0);
 
         Cells cell = new Cells();
         cell.posX = (int) (Math.random() * 26)*30;
@@ -59,11 +45,11 @@ public class Worm implements Serializable {
         cell.id = 1;
         cell.isHead=true;
         cell.headLook="RIGHT";
-        cells.put(cell.id, cell);
+        cellsHashMap.put(cell.id, cell);
     }
 
     /**
-     * Render all cells in cells collection according its coordinates
+     * Render all cellsHashMap in cellsHashMap collection according its coordinates
      *
      * @param gc - graphic context from main class
      */
@@ -72,19 +58,19 @@ public class Worm implements Serializable {
       gc.clearRect(0,0,800,800);
 
         Image image;
-        int maxI=cells.size();
+        int maxI= cellsHashMap.size();
         for (int curentCellIndex=0; curentCellIndex<maxI/*+1*/;curentCellIndex++ ){
             image=imageCell;
-            if (cells.get(curentCellIndex).isHead) {
+            if (cellsHashMap.get(curentCellIndex).isHead) {
 
-                    if (cells.get(curentCellIndex).headLook=="UP"){image=imageHeadUp;}
-                    if (cells.get(curentCellIndex).headLook=="DOWN"){image=imageHeadDowm;}
-                    if (cells.get(curentCellIndex).headLook=="LEFT"){image=imageHeadLeft;}
-                    if (cells.get(curentCellIndex).headLook=="RIGHT"){image=imageHeadRight;}
+                    if (cellsHashMap.get(curentCellIndex).headLook=="UP"){image=imageHeadUp;}
+                    if (cellsHashMap.get(curentCellIndex).headLook=="DOWN"){image=imageHeadDowm;}
+                    if (cellsHashMap.get(curentCellIndex).headLook=="LEFT"){image=imageHeadLeft;}
+                    if (cellsHashMap.get(curentCellIndex).headLook=="RIGHT"){image=imageHeadRight;}
             }
-                if (cells.get(curentCellIndex).id==0){image=imageFood;}
+                if (cellsHashMap.get(curentCellIndex).id==0){image=imageFood;}
 
-            gc.drawImage(image,cells.get(curentCellIndex).posX+1,cells.get(curentCellIndex).posY+1);
+            gc.drawImage(image, cellsHashMap.get(curentCellIndex).posX+1, cellsHashMap.get(curentCellIndex).posY+1);
         }
 
         //for (Cells currentCell :Cells )
@@ -99,10 +85,10 @@ public class Worm implements Serializable {
     public void addCell(){
 
         int headIndex=1;
-        for (int i=1; cells.get(i).isHead==false;i++){headIndex=i+1;}
+        for (int i = 1; cellsHashMap.get(i).isHead==false; i++){headIndex=i+1;}
 
         Cells newcell = new Cells();
-        Cells oldcell=cells.get(headIndex);
+        Cells oldcell= cellsHashMap.get(headIndex);
         switch (oldcell.headLook){
             case "UP" : newcell.posY=oldcell.posY-30; newcell.posX=oldcell.posX;break;
             case "DOWN" : newcell.posY=oldcell.posY+30; newcell.posX=oldcell.posX;break;
@@ -113,23 +99,23 @@ public class Worm implements Serializable {
         newcell.id = headIndex+1;
         newcell.isHead=true;
         newcell.headLook=oldcell.headLook;
-        cells.put(newcell.id, newcell);
+        cellsHashMap.put(newcell.id, newcell);
         oldcell.isHead=false;
-        cells.put(oldcell.id, oldcell);
+        cellsHashMap.put(oldcell.id, oldcell);
     }
 
     /**
      * Method change worm's head direction according pressed keys
-     * @param direction is pressed key, L/R/U/D 
+     * @param direction is pressed key, L/R/U/D
      */
     public void changeDirection(String direction){
 
         int headIndex=0;
-        for (int i=0; cells.get(i).isHead==false;i++){headIndex=i+1;}
+        for (int i = 0; cellsHashMap.get(i).isHead==false; i++){headIndex=i+1;}
 
-        Cells oldCell=cells.get(headIndex);
+        Cells oldCell= cellsHashMap.get(headIndex);
         oldCell.headLook=direction;
-        cells.put(oldCell.id, oldCell);
+        cellsHashMap.put(oldCell.id, oldCell);
     }
 
     /**
@@ -138,35 +124,35 @@ public class Worm implements Serializable {
      */
     public void makeStep(){
 
-        int maxI=cells.size();
+        int maxI= cellsHashMap.size();
         for (int currentCellIndex=1; currentCellIndex<maxI;currentCellIndex++ ) {
             int  aheadCellIndex=currentCellIndex+1;
-            if(cells.get(currentCellIndex).isHead!=true){
+            if(cellsHashMap.get(currentCellIndex).isHead!=true){
 
-                cells.get(currentCellIndex).posX=cells.get(aheadCellIndex).posX;
-                cells.get(currentCellIndex).posY=cells.get(aheadCellIndex).posY;
-                cells.get(currentCellIndex).headLook=cells.get(aheadCellIndex).headLook;
+                cellsHashMap.get(currentCellIndex).posX= cellsHashMap.get(aheadCellIndex).posX;
+                cellsHashMap.get(currentCellIndex).posY= cellsHashMap.get(aheadCellIndex).posY;
+                cellsHashMap.get(currentCellIndex).headLook= cellsHashMap.get(aheadCellIndex).headLook;
             }
             else {
-               switch (cells.get(currentCellIndex).headLook) {
+               switch (cellsHashMap.get(currentCellIndex).headLook) {
                    case "UP":
-                       cells.get(currentCellIndex).posY = cells.get(currentCellIndex).posY - 30;
-                       cells.get(currentCellIndex).posX = cells.get(currentCellIndex).posX;
+                       cellsHashMap.get(currentCellIndex).posY = cellsHashMap.get(currentCellIndex).posY - 30;
+                       cellsHashMap.get(currentCellIndex).posX = cellsHashMap.get(currentCellIndex).posX;
                        break;
                    case "DOWN":
-                       cells.get(currentCellIndex).posY = cells.get(currentCellIndex).posY + 30;
-                       cells.get(currentCellIndex).posX = cells.get(currentCellIndex).posX;
+                       cellsHashMap.get(currentCellIndex).posY = cellsHashMap.get(currentCellIndex).posY + 30;
+                       cellsHashMap.get(currentCellIndex).posX = cellsHashMap.get(currentCellIndex).posX;
                        break;
                    case "LEFT":
-                       cells.get(currentCellIndex).posX = cells.get(currentCellIndex).posX - 30;
-                       cells.get(currentCellIndex).posY = cells.get(currentCellIndex).posY;
+                       cellsHashMap.get(currentCellIndex).posX = cellsHashMap.get(currentCellIndex).posX - 30;
+                       cellsHashMap.get(currentCellIndex).posY = cellsHashMap.get(currentCellIndex).posY;
                        break;
                    case "RIGHT":
-                       cells.get(currentCellIndex).posX = cells.get(currentCellIndex).posX + 30;
-                       cells.get(currentCellIndex).posY = cells.get(currentCellIndex).posY;
+                       cellsHashMap.get(currentCellIndex).posX = cellsHashMap.get(currentCellIndex).posX + 30;
+                       cellsHashMap.get(currentCellIndex).posY = cellsHashMap.get(currentCellIndex).posY;
                        break;
                }
-                if (cells.get(currentCellIndex).posX==cells.get(0).posX && cells.get(currentCellIndex).posY==cells.get(0).posY){foodRepositioning(); addCell();}
+                if (cellsHashMap.get(currentCellIndex).posX== cellsHashMap.get(0).posX && cellsHashMap.get(currentCellIndex).posY== cellsHashMap.get(0).posY){foodRepositioning(); addCell();}
                  }
         }
     }
@@ -177,8 +163,8 @@ public class Worm implements Serializable {
     public void foodRepositioning(){
         int foodX = (int) (Math.random() * 26)*30;
         int foodY = (int) (Math.random() * 26)*30;
-        cells.get(0).posX=foodX;
-        cells.get(0).posY=foodY;
+        cellsHashMap.get(0).posX=foodX;
+        cellsHashMap.get(0).posY=foodY;
     }
 
   }
