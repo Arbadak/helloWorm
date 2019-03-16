@@ -25,7 +25,7 @@ public class Main extends Application {
     Scene scene;
     public boolean isRun=true;
     public Worm worm = new NewWorm();
-    Canvas canvas = new Canvas(800, 800);
+    Canvas canvas = new Canvas(820, 820);
     GraphicsContext gc = canvas.getGraphicsContext2D();
 
     /**
@@ -44,7 +44,7 @@ public class Main extends Application {
 
         primaryStage.setTitle("Червяг!");
         root.getChildren().add(canvas);
-        scene = new Scene(root, 1000, 800);
+        scene = new Scene(root, 1000, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
 

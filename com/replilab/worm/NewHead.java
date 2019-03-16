@@ -18,16 +18,25 @@ public class NewHead {
     private NewCell childCell;
     private Food food;
     private String event;
+    private boolean isAuto;
+    private Autopilot pilot;
+    private  int careDistance = 60;
+    private boolean collidePredicted;
 
-
-    public NewHead(StatBar statBar) {
-        CurrentX = (int) (Math.random() * 26) * 30;
-        CurrentY = (int) (Math.random() * 26) * 30;
+    public NewHead(Food food, StatBar statBar, boolean type) {
+        CurrentX = (int) (Math.random() * 20) * 30 + 180;
+        CurrentY = (int) (Math.random() * 26) * 30 + 180;
         graphicResourseLoader();
-        food = new Food(imgRes.get("FOOD"));
+        this.food = food;
         headLook.addAll(Arrays.asList("UP", "LEFT", "DOWN", "RIGHT"));
         this.statBar = statBar;
         statBar.increment();
+        /*if (this.isAuto = type == true) {
+            this.pilot = new DumpRandom();
+        }*/
+        this.isAuto = type;
+        this.pilot = new DumpRandom();
+
     }
 
     public void changeDirection(String direction) {
@@ -38,10 +47,16 @@ public class NewHead {
         if (direction == "RIGHT") {
             headLook.addFirst(headLook.pollLast());
         }
+
+        if (direction == "DOWN") {
+            isAuto=!isAuto;
+        }
     }
 
     public void work(GraphicsContext gc) {
-        food.work(gc); //ДА Я ЗНАЮ ЧТО ТАК НЕПРАВИЛЬНО!
+        if (isAuto) {
+            changeDirection(pilot.direction());
+        }
         reposition();
         drawSelf(gc);
         checkCollide();
@@ -63,20 +78,29 @@ public class NewHead {
     private void reposition() {
         x = CurrentX;
         y = CurrentY;
-        switch (headLook.peekFirst()) {
-            case "UP":
-                CurrentY = CurrentY - 30;
-                break;
-            case "DOWN":
-                CurrentY = CurrentY + 30;
-                break;
-            case "LEFT":
-                CurrentX = CurrentX - 30;
-                break;
-            case "RIGHT":
-                CurrentX = CurrentX + 30;
-                break;
-        }
+        do {
+            switch (headLook.peekFirst()) {
+                case "UP":
+                    CurrentY = CurrentY - 30;
+                    break;
+                case "DOWN":
+                    CurrentY = CurrentY + 30;
+                    break;
+                case "LEFT":
+                    CurrentX = CurrentX - 30;
+                    break;
+                case "RIGHT":
+                    CurrentX = CurrentX + 30;
+                    break;
+            }
+            collidePredicted = (CurrentY < careDistance || CurrentX < careDistance || CurrentX > 820 - careDistance || CurrentY > 820 - careDistance);
+            if (collidePredicted == true && isAuto == true) {
+                changeDirection(pilot.direction());
+                CurrentX = x;
+                CurrentY = y;
+            }
+        } while (collidePredicted == true && isAuto == true);
+
     }
 
     private void drawSelf(GraphicsContext gc) {
@@ -88,7 +112,8 @@ public class NewHead {
         imgRes.put("DOWN", new Image(getClass().getResourceAsStream("headdown.bmp")));
         imgRes.put("LEFT", new Image(getClass().getResourceAsStream("headleft.bmp")));
         imgRes.put("RIGHT", new Image(getClass().getResourceAsStream("headright.bmp")));
-        imgRes.put("FOOD", new Image(getClass().getResourceAsStream("food.bmp")));
         imgRes.put("CELL", new Image(getClass().getResourceAsStream("cell.bmp")));
     }
+
+
 }
