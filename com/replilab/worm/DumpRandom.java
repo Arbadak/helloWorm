@@ -11,4 +11,9 @@ public class DumpRandom implements Autopilot {
 
         return decision;
     }
+
+    @Override
+    public void notifyCoordFood(int x, int y) {
+
+    }
 }

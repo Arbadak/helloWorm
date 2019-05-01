@@ -1,5 +1,7 @@
 package com.replilab.worm;
 
+import java.util.LinkedList;
+
 /**
  * Cell class, is element of worm, contains every cell coordinate and heading
  */
@@ -11,8 +13,13 @@ public class Cells {
     public Boolean isHead;
     public String headLook;
 
+
+
+
     public Cells() {
     }
+
+
 
     public Cells(Integer id, int posX, int posY, String cellColor, Boolean isHead, String headLook) {
         this.id = id;

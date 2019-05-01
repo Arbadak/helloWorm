@@ -24,10 +24,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
     Scene scene;
     public boolean isRun=true;
-    public Worm worm = new NewWorm();
+
     Canvas canvas = new Canvas(820, 820);
     GraphicsContext gc = canvas.getGraphicsContext2D();
-
+    public Worm worm = new NewWorm(gc);
     /**
      * Launch method, make first cell, place food, prepare canvas window, add task to timer
      *
