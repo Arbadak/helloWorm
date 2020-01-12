@@ -1,4 +1,4 @@
-package com.replilab.worm;
+package com.replilab.worm.ai;
 
 import java.util.Arrays;
 import java.util.Deque;

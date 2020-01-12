@@ -1,7 +1,5 @@
 package com.replilab.worm;
 
-import java.io.*;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Application;
@@ -16,31 +14,21 @@ import javafx.stage.Stage;
 
 /**
  * This project is the *****SANDBOX****** for the studing purpose only
- *
- *
- * Launch class, preparing objects, canvas.
  */
 
 public class Main extends Application {
     Scene scene;
-    public boolean isRun=true;
+    public boolean isRun = true;
 
     Canvas canvas = new Canvas(820, 820);
     GraphicsContext gc = canvas.getGraphicsContext2D();
-    public Worm worm = new NewWorm(gc);
-    /**
-     * Launch method, make first cell, place food, prepare canvas window, add task to timer
-     *
-     * @param primaryStage
-     * @throws Exception
-     */
-        @Override
-    public void start(Stage primaryStage) throws Exception {
+    public Worm worm = new Worm(gc);
+
+    @Override
+    public void start(Stage primaryStage) {
 
         worm.begin();
-        worm.foodRepositioning();
         Group root = new Group();
-        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
         primaryStage.setTitle("Червяг!");
         root.getChildren().add(canvas);
@@ -52,74 +40,28 @@ public class Main extends Application {
         timer.schedule(new AliveTask(), 0, 300);
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            /**
-             * keyboard listener method, filters pressed keys and calls change direction method, aloso call a render
-             *
-             * @param ke
-             */
             public void handle(KeyEvent ke) {
-                //    KeyCode key= ke.getCode();
-                KeyCode cc = ke.getCode();
-                //  int cc=key.getCode();
-                //if(cc==37 ){System.out.print("LEFT");}
-                String getDrirection = ke.getCode().toString();
-                //if(getDrirection=="DIVIDE"){worm.foodRepositioning();}
-                //if(getDrirection=="MULTIPLY"){worm.addCell();}
-                if (getDrirection == "LEFT" | getDrirection == "RIGHT" | getDrirection == "UP" | getDrirection == "DOWN") {
-                    worm.changeDirection(getDrirection);
-                }
-                if (getDrirection == "S") {
-                    try {
-                        saveState();
-                    } catch (Exception FileNotFoundException) {
-                    }
-
-                }
-                if (getDrirection == "L") {
-                    try {
-                        loadState();
-                    } catch (Exception FileNotFoundException) {
-                    }
-
+                KeyCode pressedKey = ke.getCode();
+                if (pressedKey == KeyCode.LEFT | pressedKey == KeyCode.RIGHT) {
+                    worm.changeDirection(pressedKey);
                 }
                 worm.render(gc);
             }
         });
     }
 
-public static void main(String[] args) {launch(args);}
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     /**
      * Timer class for pereodic worm iteration for making a step
      */
 
-public class AliveTask extends TimerTask{
-    @Override
+    public class AliveTask extends TimerTask {
+        @Override
         public void run() {
-            worm.makeStep();
             worm.render(gc);
         }
-    }
-    private void saveState() throws FileNotFoundException, IOException {
-        FileOutputStream fos = new FileOutputStream("save.dat");
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(worm.cellsHashMap);
-        oos.flush();
-        oos.close();
-        fos.close();
-
-    }
-
-    public void loadState() throws FileNotFoundException, IOException, ClassNotFoundException {
-    /*    FileInputStream fis = new FileInputStream("save.dat");
-        ObjectInputStream ois = new ObjectInputStream(fis);
-       // Worm w1;
-        HashMap<Integer, Worm.Cells>newCell = new HashMap<Integer, Worm.Cells>();
-        //worm.cellsHashMap = (HashMap<Integer, Worm.Cells>) ois.readObject();
-        newCell = (HashMap<Integer, Worm.Cells>) ois.readObject();
-        worm.cellsHashMap = newCell;
-        ois.close();
-        fis.close();
-*/
     }
 }

@@ -1,10 +1,8 @@
 package com.replilab.worm;
 
+import com.replilab.worm.ai.CoordinateObserver;
 import com.replilab.worm.ai.MapBuilder;
 import com.replilab.worm.ai.XYpair;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -16,17 +14,18 @@ public class AutoHead implements Actor {
     private Map<String, Image> imgRes = new ConcurrentHashMap<>();
     private int CurrentY, CurrentX;
     private int x, y; //Координаты до пересчета нужны для отправки цепочке звеньев
-    private NewCell childCell;
+    private Cell childCell;
     private Food food;
     private String event;
     private final GraphicsContext gc;
     Set onScreenObjectSet;
     MapBuilder mapBuilder;
     LinkedList<XYpair>path;
+    CoordinateObserver observer;
 
 
 
-    public AutoHead (Food food, GraphicsContext gc, Set onScreenObjectSet) {
+    public AutoHead (Food food, GraphicsContext gc, Set onScreenObjectSet, CoordinateObserver observer) {
 
         CurrentX = (int) (Math.random() * 20) * 30 + 180;
         CurrentY = (int) (Math.random() * 26) * 30 + 180;
@@ -37,6 +36,7 @@ public class AutoHead implements Actor {
         onScreenObjectSet.add(this);
         mapBuilder=new MapBuilder();
         path=new LinkedList<>();
+        this.observer=observer;
     }
 
 
@@ -47,9 +47,9 @@ public class AutoHead implements Actor {
         checkCollide();
 
         if (event == "grow" && childCell == null) {
-            childCell = new NewCell(gc, x, y, imgRes.get("CELL"),onScreenObjectSet );
+            childCell = new Cell(gc, x, y, imgRes.get("CELL"),onScreenObjectSet, observer);
         }else if (childCell != null) {
-            childCell.work(gc, x, y, event);}
+            childCell.work( x, y, event);}
     }
     private void checkCollide() {
         if (food.doesIhitYou(CurrentX, CurrentY) == true) {
@@ -71,11 +71,15 @@ public class AutoHead implements Actor {
 
 
     private void reposition(){
-       if(path.isEmpty()) {mapBuilder.calculatePath(new XYpair(CurrentX, CurrentY));}
+       if(path.isEmpty()) {
+           mapBuilder.calculatePath(new XYpair(CurrentX, CurrentY));
+       }
        x=CurrentX;
        y=CurrentY;
        XYpair nextStep=path.getFirst();
        CurrentX=nextStep.x;
        CurrentY=nextStep.y;
     }
+
+    public void changeDirection(String direction) {return;}
 }

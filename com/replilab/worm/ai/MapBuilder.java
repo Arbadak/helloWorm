@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MapBuilder {
 
@@ -22,12 +23,13 @@ public class MapBuilder {
 
     public List<XYpair>calculatePath(XYpair currentPosition){
     buildAmap(currentPosition);
-    return buildPath(foodCoord, currentPosition);
+    List path=buildPath(foodCoord, currentPosition);
+    return path;
 
     }
 
     private void buildAmap(XYpair start) {
-        frontier = new PriorityQueue<>();
+        frontier = new LinkedBlockingQueue<>();
         frontier.add(start);
         cameFrom = new HashMap<>();
         cameFrom.put(start, null);
@@ -35,7 +37,8 @@ public class MapBuilder {
 
         while (!frontier.isEmpty()) {
             current = frontier.poll();
-            for (XYpair next : getNeiborgh(current)) {
+            List <XYpair> neighborsList=getNeiborgh(current);
+            for (XYpair next : neighborsList ) {
 
                 if (!cameFrom.containsKey(next)) {
                     frontier.add(next);
@@ -48,10 +51,10 @@ public class MapBuilder {
     private List<XYpair> getNeiborgh(XYpair currentPoint) {
 
         List<XYpair> neighbors = new ArrayList();
-        neighbors.add(new XYpair(currentPoint.x, currentPoint.y + 1));
-        neighbors.add(new XYpair(currentPoint.x, currentPoint.y - 1));
-        neighbors.add(new XYpair(currentPoint.x + 1, currentPoint.y));
-        neighbors.add(new XYpair(currentPoint.x - 1, currentPoint.y));
+        neighbors.add(new XYpair(currentPoint.x, currentPoint.y + 30));
+        neighbors.add(new XYpair(currentPoint.x, currentPoint.y - 30));
+        neighbors.add(new XYpair(currentPoint.x + 30, currentPoint.y));
+        neighbors.add(new XYpair(currentPoint.x - 30, currentPoint.y));
         return neighbors;
     }
 

@@ -12,7 +12,7 @@ public class Boundry implements Actor, Hittable {
     private final GraphicsContext gc;
     public Boundry(GraphicsContext gc) {
         this.gc=gc;
-        image = new Image(getClass().getResourceAsStream("bound.bmp"));
+        image = new Image(getClass().getResourceAsStream("resource/bound.bmp"));
     }
 
 

@@ -15,7 +15,7 @@ public class Food implements Actor, Hittable {
         this.gc=gc;
        // this.aiAware=aiAware;
         reposition();
-        this.imageCell = new Image(getClass().getResourceAsStream("food.bmp"));
+        this.imageCell = new Image(getClass().getResourceAsStream("resource/food.bmp"));
         onScreenObjectSet.add(this);
 
     }
